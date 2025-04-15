@@ -1,0 +1,1 @@
+option('assetdir', type : 'string', value : 'share/Rush/assets', description : 'Assets dir relative to prefix')

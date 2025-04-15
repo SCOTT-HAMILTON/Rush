@@ -1,4 +1,5 @@
 #include "Button.h"
+#include "Config.h"
 
 Button::Button(const sf::Vector2f &pos, const std::string &strtext)
 {
@@ -10,7 +11,7 @@ Button::Button(const sf::Vector2f &pos, const std::string &strtext)
     button.setOutlineThickness(5);
     button.setPosition(pos.x-button.getGlobalBounds().width/2, pos.y-button.getGlobalBounds().height/2);
 
-    font.loadFromFile("BebasNeue-Regular.otf");
+    font.loadFromFile(FILE_BEBASNEUE);
     text = sf::Text(strtext, font, 30);
     this->text.setPosition(pos.x-this->text.getGlobalBounds().width/2-8, pos.y-this->text.getGlobalBounds().height/2-12);
 }

@@ -1,0 +1,16 @@
+#pragma once
+
+#define ASSETDIR "@assetdir@"
+
+#define FILE_BEBASNEUE ASSETDIR "/BebasNeue-Regular.otf"
+#define FILE_BOMB2 ASSETDIR "/bomb2.ogg"
+#define FILE_DEMOS_RULE_DEGAT ASSETDIR "/demos_rule_degat.png"
+#define FILE_DEMOS_RULE_LAND ASSETDIR "/demos_rule_land.png"
+#define FILE_DEMOS_RULE_SHOOT ASSETDIR "/demos_rule_shoot.png"
+#define FILE_FIPPS ASSETDIR "/Fipps-Regular.otf"
+#define FILE_FLY ASSETDIR "/fly.ogg"
+#define FILE_HOME ASSETDIR "/home.png"
+#define FILE_LAND ASSETDIR "/land.ogg"
+#define FILE_PIXEL ASSETDIR "/Pixel-Noir Caps.ttf"
+#define FILE_SHOOT ASSETDIR "/shoot.ogg"
+#define FILE_TOUCH_SHOOT ASSETDIR "/touch_shoot.ogg"

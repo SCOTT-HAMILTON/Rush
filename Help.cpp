@@ -1,4 +1,5 @@
 #include "Help.h"
+#include "Config.h"
 
 Help::Help(sf::RenderWindow &fenetre) :
     fenetre(fenetre)
@@ -23,7 +24,7 @@ void Help::play(){
 
     sf::Text text;
     sf::Font font;
-    font.loadFromFile("BebasNeue-Regular.otf");
+    font.loadFromFile(FILE_BEBASNEUE);
 
     sf::Clock c;
 

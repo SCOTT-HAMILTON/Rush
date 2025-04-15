@@ -1,4 +1,5 @@
 #include "Rules.h"
+#include "Config.h"
 
 Rules::Rules(sf::RenderWindow &fenetre) :
     fenetre(fenetre)
@@ -15,10 +16,10 @@ Rules::~Rules()
 void Rules::play(){
 
     id = 0;
-    if (!img.loadFromFile("demos_rule_degat.png")){
+    if (!img.loadFromFile(FILE_DEMOS_RULE_DEGAT)){
         std::cout << "image rule doesn't exist!" << std::endl;
     }
-    font.loadFromFile("BebasNeue-Regular.otf");
+    font.loadFromFile(FILE_BEBASNEUE);
     text = sf::Text("Don't touch the boat's missiles !!!", font, 35);
     text.setPosition(200, 100);
     text.setFillColor(sf::Color(250, 250, 250));
@@ -82,7 +83,7 @@ void Rules::play(){
                     id = 0;
                     img = sf::Image();
                     if (status == "missile"){
-                        if (!img.loadFromFile("demos_rule_shoot.png")){
+                        if (!img.loadFromFile(FILE_DEMOS_RULE_SHOOT)){
                             std::cout << "image rule doesn't exist!" << std::endl;
                             continuer = false;
                             break;
@@ -90,7 +91,7 @@ void Rules::play(){
                         text.setString("You can shoot with space !");
                         delay = 3000;
                     }else if (status == "land"){
-                        if (!img.loadFromFile("demos_rule_land.png")){
+                        if (!img.loadFromFile(FILE_DEMOS_RULE_LAND)){
                             std::cout << "image rule doesn't exist!" << std::endl;
                             continuer = false;
                             break;

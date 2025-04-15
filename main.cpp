@@ -6,11 +6,13 @@
 #include <random>
 #include "BoomAnim.h"
 #include "Menu.h"
+#include "Config.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 #include <thread>
 #include <memory>
 #include <fstream>
+#include <cxxopts.hpp>
 
 std::random_device rd;
 std::mt19937 rng(rd());
@@ -64,8 +66,33 @@ const int max_missileboats = 100;
 bool continue_wait = false;
 GameMode mode;
 
-int main()
+int main(int argc, char *argv[])
 {
+
+    // Default configuration
+    std::string address = "0.0.0.0";
+    try {
+        cxxopts::Options options(argv[0], "Rush\nA solo or multiplayer LAN naval game\nFor the multiplayer mode, please open ports 50 000 or 60 000on both sides");
+        options.add_options()
+            ("a,address", "IP address of the remote partner to play with in multiplayer", 
+             cxxopts::value<std::string>(address)->default_value("0.0.0.0"))
+            ("h,help", "Print this help message");
+        auto result = options.parse(argc, argv);
+        if (result.count("help")) {
+            std::cout << options.help() << std::endl;
+            return 0;
+        }
+        // Validate address
+        remote_addr = sf::IpAddress(address);
+        if (remote_addr == sf::IpAddress::None) {
+            throw std::runtime_error("Invalid IP address: " + address);
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n\n";
+        std::cerr << "Use --help for usage information" << std::endl;
+        return 1;
+    }
+    std::cout << "[DEBUG] remote address : `" << remote_addr << '`' << std::endl;
 
     sf::Clock myclock;
     sf::Clock boat_creation_cooldown;
@@ -79,13 +106,6 @@ int main()
     bool got_focus = true;
     sf::Packet pack_s;
     bool go_to_menu = false;
-
-    std::ifstream file;
-    file.open("options.txt", std::ios::in);
-    char buffer[1001];
-    file.getline(buffer, 1000);
-    remote_addr = sf::IpAddress(buffer);
-    std::cout << "address : " << remote_addr << std::endl;
 
     sf::RenderWindow fenetre(sf::VideoMode(800, 600), "Rush ");
     sf::Event event;
@@ -148,7 +168,8 @@ int main()
 
     /*FONTS - TEXT*/
     sf::Font font_flyinfo;
-    if (!font_flyinfo.loadFromFile("BebasNeue-Regular.otf")){
+    if (!font_flyinfo.loadFromFile(FILE_BEBASNEUE)){
+        std::cerr << "[DEBUG] Cant load font BebasNeue-Regular.otf, exitting..." << std::endl;
         return 0;
     }
 
@@ -201,36 +222,36 @@ int main()
     /*  AUDIO  */
 
     sf::SoundBuffer shoot_sndbuffer;
-    shoot_sndbuffer.loadFromFile("shoot.ogg");
+    shoot_sndbuffer.loadFromFile(FILE_SHOOT);
     sf::Sound shoot_snd;
     shoot_snd.setBuffer(shoot_sndbuffer);
     shoot_snd.setVolume(50);
 
     sf::SoundBuffer land_sndbuffer;
-    land_sndbuffer.loadFromFile("land.ogg");
+    land_sndbuffer.loadFromFile(FILE_LAND);
     sf::Sound land_snd;
     land_snd.setBuffer(land_sndbuffer);
 
     sf::SoundBuffer fly_sndbuffer;
-    fly_sndbuffer.loadFromFile("fly.ogg");
+    fly_sndbuffer.loadFromFile(FILE_FLY);
     sf::Sound fly_snd;
     fly_snd.setBuffer(fly_sndbuffer);
     fly_snd.setLoop(true);
 
     sf::SoundBuffer boat_touch_shoot_sndbuffer;
-    boat_touch_shoot_sndbuffer.loadFromFile("touch_shoot.ogg");
+    boat_touch_shoot_sndbuffer.loadFromFile(FILE_TOUCH_SHOOT);
     sf::Sound boat_touch_shoot_snd;
     boat_touch_shoot_snd.setBuffer(boat_touch_shoot_sndbuffer);
 
     sf::SoundBuffer boat_touch_bomb_sndbuffer;
-    boat_touch_bomb_sndbuffer.loadFromFile("bomb2.ogg");
+    boat_touch_bomb_sndbuffer.loadFromFile(FILE_BOMB2);
     sf::Sound boat_touch_bomb_snd;
     boat_touch_bomb_snd.setBuffer(boat_touch_bomb_sndbuffer);
 
     /*  AUDIO  */
 
     sf::Texture home_texture;
-    home_texture.loadFromFile("home.png");
+    home_texture.loadFromFile(FILE_HOME);
     sf::Sprite home;
     home.setTexture(home_texture);
     home.setScale(0.15, 0.15);
@@ -804,11 +825,11 @@ float distance(const sf::Vector2f &p1, const sf::Vector2f &p2){
 
 void updateFont(sf::Font &font){
     if (time(NULL)%2 == 0){
-        if (!font.loadFromFile("Pixel-Noir Caps.ttf")){
+        if (!font.loadFromFile(FILE_PIXEL)){
             std::cout << "error when loading font !" << std::endl;
         }
     }else{
-        if (!font.loadFromFile("Fipps-Regular.otf")){
+        if (!font.loadFromFile(FILE_FIPPS)){
             std::cout << "error when loading font !" << std::endl;
         }
     }
